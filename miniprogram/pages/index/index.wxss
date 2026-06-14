@@ -412,12 +412,13 @@
 
 .note-input {
   width: 100%;
-  height: 80rpx;
+  min-height: 80rpx;
   background: #F8F8F8;
   border-radius: 12rpx;
-  padding: 0 20rpx;
+  padding: 16rpx 20rpx;
   font-size: 28rpx;
   color: #2D2D2D;
+  line-height: 1.5;
 }
 
 .popup-footer {

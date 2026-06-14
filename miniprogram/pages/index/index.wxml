@@ -102,8 +102,8 @@
         
         <view class="note-section">
           <text class="note-label">备注（选填）</text>
-          <input class="note-input" placeholder="写下今天的感受..." 
-                 model:value="{{popupNote}}" />
+          <textarea class="note-input" placeholder="写下今天的感受..." 
+                 value="{{popupNote}}" bindinput="onNoteInput" />
         </view>
       </view>
 

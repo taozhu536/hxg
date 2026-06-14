@@ -78,8 +78,8 @@ async function main() {
   try {
     await ci.upload({
       project,
-      version: '1.0.0',
-      desc: '初始版本 - 拜拜坏习惯拯救时间',
+      version: '1.0.2',
+      desc: '修复打卡备注输入问题 - 改用textarea组件',
       setting: { es6: true, minify: true },
       onProgressUpdate: (task) => {
         if (task.status === 'doing') process.stdout.write('.');
