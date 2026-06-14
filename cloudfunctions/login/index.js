@@ -30,7 +30,23 @@ exports.main = async (event, context) => {
 
 // 登录：获取 openid，同时确保 users 表有该用户记录
 async function doLogin(openid) {
-  const userRes = await db.collection('users').where({ openid }).get()
+  // 尝试获取用户，如果 users 集合不存在则自动创建
+  let userRes
+  try {
+    userRes = await db.collection('users').where({ openid }).get()
+  } catch (err) {
+    // 集合不存在，创建它
+    if (err.message && err.message.includes('does not exist')) {
+      try {
+        await db.createCollection('users')
+        console.log('✅ 自动创建 users 集合成功')
+      } catch (e) {
+        console.error('创建 users 集合失败:', e.message)
+      }
+    }
+    userRes = await db.collection('users').where({ openid }).get()
+  }
+  
   let user = userRes.data[0] || null
 
   if (!user) {

@@ -19,9 +19,14 @@
       </block>
       <text class="nickname">{{userInfo.nickName || '戒瘾勇士'}}</text>
       <text class="motto">每一次打卡，都是向更好的自己迈进 💪</text>
-      <button class="edit-profile-btn" wx:if="{{!gotUserProfile}}" open-type="getUserInfo" bindgetuserinfo="onGetUserInfo">
-        🖊️ 获取微信头像昵称
-      </button>
+      <view class="edit-profile-row" wx:if="{{!gotUserProfile}}">
+        <button class="edit-avatar-btn" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar">
+          🖼️ 换头像
+        </button>
+        <button class="edit-name-btn" bindtap="onEditNickName">
+          ✏️ 改昵称
+        </button>
+      </view>
     </view>
 
     <!-- 总览数据 -->

@@ -78,8 +78,8 @@ async function main() {
   try {
     await ci.upload({
       project,
-      version: '1.1.0',
-      desc: '微信昵称头像 + 好友系统(邀请码) + 日历好友打卡',
+      version: '1.1.1',
+      desc: '修复：头像昵称使用官方组件 + 自动创建users集合',
       setting: { es6: true, minify: true },
       onProgressUpdate: (task) => {
         if (task.status === 'doing') process.stdout.write('.');

@@ -50,6 +50,26 @@
   border: none;
 }
 
+.edit-profile-row {
+  display: flex;
+  gap: 16rpx;
+  margin-top: 16rpx;
+}
+
+.edit-avatar-btn, .edit-name-btn {
+  padding: 8rpx 28rpx;
+  font-size: 22rpx;
+  color: #fff;
+  background: rgba(255,255,255,0.2);
+  border: 2rpx solid rgba(255,255,255,0.4);
+  border-radius: 30rpx;
+  line-height: 2;
+}
+
+.edit-avatar-btn::after, .edit-name-btn::after {
+  border: none;
+}
+
 .nickname {
   font-size: 36rpx;
   font-weight: 700;

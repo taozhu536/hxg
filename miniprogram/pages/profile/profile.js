@@ -64,38 +64,81 @@ Page({
     }
   },
 
-  // 获取微信用户信息
-  async onGetUserInfo(e) {
-    const { userInfo } = e.detail
-    if (!userInfo) {
-      wx.showToast({ title: '获取信息失败', icon: 'none' })
+  // 使用微信头像选择组件
+  async onChooseAvatar(e) {
+    const { avatarUrl } = e.detail
+    if (!avatarUrl) {
+      wx.showToast({ title: '获取头像失败', icon: 'none' })
       return
     }
 
     try {
       wx.showLoading({ title: '保存中...' })
+      
+      // 上传头像到云存储
+      const cloudPath = `avatars/${Date.now()}.jpg`
+      const uploadRes = await wx.cloud.uploadFile({
+        cloudPath,
+        filePath: avatarUrl,
+      })
+      
+      const fileId = uploadRes.fileID
+
       await wx.cloud.callFunction({
         name: 'login',
         data: {
           action: 'updateProfile',
-          nickName: userInfo.nickName,
-          avatarUrl: userInfo.avatarUrl
+          nickName: this.data.userInfo.nickName || '戒瘾勇士',
+          avatarUrl: fileId
         }
       })
 
       this.setData({
-        userInfo: {
-          nickName: userInfo.nickName,
-          avatarUrl: userInfo.avatarUrl
-        },
+        'userInfo.avatarUrl': fileId,
         gotUserProfile: true
       })
       wx.hideLoading()
-      wx.showToast({ title: '✅ 更新成功', icon: 'success' })
+      wx.showToast({ title: '✅ 头像已更新', icon: 'success' })
     } catch (err) {
       wx.hideLoading()
+      console.error(err)
       wx.showToast({ title: '保存失败', icon: 'none' })
     }
+  },
+
+  // 编辑昵称弹窗
+  onEditNickName() {
+    wx.showModal({
+      title: '修改昵称',
+      content: '',
+      editable: true,
+      placeholderText: '输入你的昵称',
+      success: async (res) => {
+        if (res.confirm && res.content.trim()) {
+          const nickName = res.content.trim()
+          try {
+            wx.showLoading({ title: '保存中...' })
+            await wx.cloud.callFunction({
+              name: 'login',
+              data: {
+                action: 'updateProfile',
+                nickName,
+                avatarUrl: this.data.userInfo.avatarUrl || ''
+              }
+            })
+            this.setData({
+              'userInfo.nickName': nickName,
+              gotUserProfile: true
+            })
+            wx.hideLoading()
+            wx.showToast({ title: '✅ 昵称已更新', icon: 'success' })
+          } catch (err) {
+            wx.hideLoading()
+            wx.showToast({ title: '保存失败', icon: 'none' })
+          }
+        }
+      }
+    })
   },
 
   // === 好友功能 ===
