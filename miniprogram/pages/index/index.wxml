@@ -89,7 +89,7 @@
   </view>
 
   <!-- 打卡弹窗 -->
-  <view class="popup-overlay {{showPopup ? 'show' : ''}}" bindtap="onClosePopup">
+  <view class="popup-overlay {{showPopup ? 'show' : ''}}" catchtap="onClosePopup">
     <view class="popup-content" catchtap="">
       <view class="popup-header">
         <text class="popup-title">📝 打卡确认</text>
@@ -103,7 +103,8 @@
         <view class="note-section">
           <text class="note-label">备注（选填）</text>
           <textarea class="note-input" placeholder="写下今天的感受..." 
-                 value="{{popupNote}}" bindinput="onNoteInput" />
+                 value="{{popupNote}}" bindinput="onNoteInput" 
+                 adjust-position="{{true}}" auto-height="{{true}}" />
         </view>
       </view>
 

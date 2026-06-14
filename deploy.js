@@ -78,8 +78,8 @@ async function main() {
   try {
     await ci.upload({
       project,
-      version: '1.0.2',
-      desc: '修复打卡备注输入问题 - 改用textarea组件',
+      version: '1.0.3',
+      desc: '修复点击备注输入框弹窗关闭的问题 - 使用catchtap阻止事件冒泡',
       setting: { es6: true, minify: true },
       onProgressUpdate: (task) => {
         if (task.status === 'doing') process.stdout.write('.');
