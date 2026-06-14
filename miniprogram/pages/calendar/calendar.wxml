@@ -58,6 +58,39 @@
     </view>
   </view>
 
+  <!-- 日详情弹窗 -->
+  <view class="detail-overlay {{showDetail ? 'show' : ''}}" catchtap="onCloseDetail">
+    <view class="detail-content" catchtap="">
+      <view class="detail-header">
+        <text class="detail-title">📋 {{detailDate}} 打卡记录</text>
+        <view class="detail-close" bindtap="onCloseDetail">✕</view>
+      </view>
+
+      <view class="detail-body">
+        <view wx:if="{{dayDetail && dayDetail.length > 0}}">
+          <view class="detail-item" wx:for="{{dayDetail}}" wx:key="index">
+            <view class="detail-item-header">
+              <text class="detail-item-icon">{{item.habitIcon}}</text>
+              <text class="detail-item-name">{{item.habitName}}</text>
+            </view>
+            <view class="detail-item-note" wx:if="{{item.note}}">
+              <text class="detail-note-label">💬 感受：</text>
+              <text class="detail-note-text">{{item.note}}</text>
+            </view>
+            <view class="detail-item-note" wx:else>
+              <text class="detail-note-empty">没有备注</text>
+            </view>
+          </view>
+        </view>
+        <view wx:else>
+          <view class="detail-empty">
+            <text>这一天没有打卡记录</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
   <!-- 加载 -->
   <view class="loading-state" wx:if="{{loading}}">
     <text>加载中...</text>

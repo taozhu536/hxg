@@ -10,6 +10,8 @@ Page({
     selectedHabitId: 'all',
     selectedDay: null,
     dayDetail: null,
+    detailDate: '',
+    showDetail: false,
     monthStats: { totalDays: 0, checkedDays: 0 },
     loading: true
   },
@@ -144,18 +146,35 @@ Page({
   },
 
   // 点击日期查看详情
-  onDayTap(e) {
+  async onDayTap(e) {
     const { date } = e.currentTarget.dataset
     if (!date) return
     
     const now = new Date()
     if (new Date(date) > now) return
     
-    // 这里可以跳转到该日期的打卡详情页
-    wx.showToast({
-      title: `${date} 的打卡详情`,
-      icon: 'none'
-    })
+    wx.showLoading({ title: '加载中...' })
+    try {
+      const res = await wx.cloud.callFunction({
+        name: 'checkin',
+        data: { action: 'daily', date }
+      })
+      
+      this.setData({
+        dayDetail: res.result.data || [],
+        detailDate: date,
+        showDetail: true
+      })
+    } catch (err) {
+      console.error(err)
+      wx.showToast({ title: '加载失败', icon: 'none' })
+    }
+    wx.hideLoading()
+  },
+
+  // 关闭详情弹窗
+  onCloseDetail() {
+    this.setData({ showDetail: false })
   },
 
   onHabitFilter(e) {

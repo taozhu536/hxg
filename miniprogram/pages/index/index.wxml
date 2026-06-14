@@ -89,7 +89,8 @@
   </view>
 
   <!-- 打卡弹窗 -->
-  <view class="popup-overlay {{showPopup ? 'show' : ''}}" catchtap="onClosePopup">
+  <view class="popup-overlay {{showPopup ? 'show' : ''}}" catchtap="onClosePopup"
+       bindtouchstart="onPopupTouchStart" bindtouchend="onPopupTouchEnd">
     <view class="popup-content" catchtap="">
       <view class="popup-header">
         <text class="popup-title">📝 打卡确认</text>

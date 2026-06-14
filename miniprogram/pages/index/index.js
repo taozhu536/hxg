@@ -11,7 +11,9 @@ Page({
     popupNote: '',
     popupDate: '',
     loading: true,
-    userStats: { totalCheckins: 0, currentStreak: 0 }
+    userStats: { totalCheckins: 0, currentStreak: 0 },
+    touchStartY: 0,
+    touchEndY: 0
   },
 
   onLoad() {
@@ -104,7 +106,20 @@ Page({
 
   // 关闭弹窗
   onClosePopup() {
+    // 防误触检测：如果 touchStart 和 touchEnd 的 Y 轴偏移超过 30px，说明用户在滑动/键盘弹出导致的误触，不关闭
+    const delta = Math.abs(this.data.touchEndY - this.data.touchStartY)
+    if (delta > 30) return
     this.setData({ showPopup: false })
+  },
+
+  // 弹窗触摸开始
+  onPopupTouchStart(e) {
+    this.data.touchStartY = e.touches[0].clientY
+  },
+
+  // 弹窗触摸结束
+  onPopupTouchEnd(e) {
+    this.data.touchEndY = e.changedTouches[0].clientY
   },
 
   // 输入打卡备注

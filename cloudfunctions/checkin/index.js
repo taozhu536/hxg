@@ -29,6 +29,8 @@ exports.main = async (event, context) => {
         return await getStreakInfo(openid, data)
       case 'undo':
         return await undoCheckin(openid, data)
+      case 'daily':
+        return await getDailyDetail(openid, data)
       default:
         return { code: -1, msg: '未知动作' }
     }
@@ -225,6 +227,40 @@ async function updateHabitStats(openid, habitId, today) {
       updatedAt: db.serverDate()
     }
   })
+}
+
+// 获取某天的打卡详情（含备注 + 习惯名称）
+async function getDailyDetail(openid, data) {
+  const { date } = data
+  if (!date) return { code: -1, msg: '缺少日期' }
+  
+  // 获取该日打卡记录
+  const checkinsRes = await db.collection('checkins')
+    .where({ openid, date })
+    .get()
+  
+  if (checkinsRes.data.length === 0) {
+    return { code: 0, data: [] }
+  }
+  
+  // 获取每个打卡对应的习惯名称和图标
+  const habitIds = [...new Set(checkinsRes.data.map(c => c.habitId))]
+  const habitsRes = await db.collection('habits')
+    .where({ _id: _.in(habitIds) })
+    .get()
+  
+  const habitMap = {}
+  habitsRes.data.forEach(h => {
+    habitMap[h._id] = { name: h.name, icon: h.icon || '📌' }
+  })
+  
+  const result = checkinsRes.data.map(c => ({
+    ...c,
+    habitName: (habitMap[c.habitId] || {}).name || '未知习惯',
+    habitIcon: (habitMap[c.habitId] || {}).icon || '📌'
+  }))
+  
+  return { code: 0, data: result }
 }
 
 // 工具函数
