@@ -11,9 +11,17 @@
 
     <!-- 用户信息区 -->
     <view class="profile-header">
-      <view class="avatar">👤</view>
-      <text class="nickname">{{loginStatus ? '戒瘾勇士' : '未登录'}}</text>
+      <block wx:if="{{userInfo.avatarUrl}}">
+        <image class="avatar-img" src="{{userInfo.avatarUrl}}" mode="aspectFill"></image>
+      </block>
+      <block wx:else>
+        <view class="avatar">👤</view>
+      </block>
+      <text class="nickname">{{userInfo.nickName || '戒瘾勇士'}}</text>
       <text class="motto">每一次打卡，都是向更好的自己迈进 💪</text>
+      <button class="edit-profile-btn" wx:if="{{!gotUserProfile}}" open-type="getUserInfo" bindgetuserinfo="onGetUserInfo">
+        🖊️ 获取微信头像昵称
+      </button>
     </view>
 
     <!-- 总览数据 -->
@@ -46,6 +54,41 @@
       </view>
     </view>
 
+    <!-- 好友区域 -->
+    <view class="section">
+      <view class="section-title-row">
+        <text class="section-title">👥 我的好友</text>
+        <view class="section-action" bindtap="onShowAddFriend">+ 添加</view>
+      </view>
+
+      <view wx:if="{{friends && friends.length > 0}}">
+        <view class="friend-item" wx:for="{{friends}}" wx:key="openid">
+          <block wx:if="{{item.avatarUrl}}">
+            <image class="friend-avatar" src="{{item.avatarUrl}}" mode="aspectFill"></image>
+          </block>
+          <block wx:else>
+            <view class="friend-avatar-placeholder">👤</view>
+          </block>
+          <view class="friend-info">
+            <text class="friend-name">{{item.nickName || '好友'}}</text>
+            <text class="friend-stats">今日打卡 {{item.todayCheckins}} 次 · 累计 {{item.totalCheckins}} 次</text>
+          </view>
+        </view>
+      </view>
+      <view wx:else>
+        <view class="friend-empty">
+          <text>还没有好友，点击右上角「+ 添加」吧</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 邀请码 -->
+    <view class="invite-card">
+      <text class="invite-label">📢 我的邀请码</text>
+      <text class="invite-code">{{inviteCode || '---'}}</text>
+      <text class="invite-hint">分享给朋友，让对方输入此码即可添加好友</text>
+    </view>
+
     <!-- 菜单列表 -->
     <view class="menu-group">
       <view class="menu-item" bindtap="onAbout">
@@ -55,6 +98,23 @@
       </view>
     </view>
 
+  </view>
+
+  <!-- 添加好友弹窗 -->
+  <view class="add-friend-overlay {{showAddFriend ? 'show' : ''}}" catchtap="onCloseAddFriend">
+    <view class="add-friend-content" catchtap="">
+      <view class="add-friend-header">
+        <text class="add-friend-title">🤝 添加好友</text>
+        <view class="add-friend-close" bindtap="onCloseAddFriend">✕</view>
+      </view>
+      <view class="add-friend-body">
+        <text class="add-friend-label">输入对方的邀请码</text>
+        <input class="add-friend-input" placeholder="例如：2P31" 
+               value="{{addFriendCode}}" bindinput="onAddCodeInput" maxlength="4" />
+        <button class="btn-primary" bindtap="onConfirmAddFriend" wx:if="{{addFriendCode.length >= 4}}">✅ 确认添加</button>
+        <button class="btn-disabled" wx:else>输入4位邀请码</button>
+      </view>
+    </view>
   </view>
 
 </view>

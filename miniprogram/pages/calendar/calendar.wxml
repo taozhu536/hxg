@@ -67,6 +67,8 @@
       </view>
 
       <view class="detail-body">
+        <!-- 自己的打卡 -->
+        <text class="detail-section-label" wx:if="{{dayDetail && dayDetail.length > 0}}">🙋 我的打卡</text>
         <view wx:if="{{dayDetail && dayDetail.length > 0}}">
           <view class="detail-item" wx:for="{{dayDetail}}" wx:key="index">
             <view class="detail-item-header">
@@ -82,13 +84,53 @@
             </view>
           </view>
         </view>
-        <view wx:else>
+        <view wx:elif="{{!detailFriendData || detailFriendData.length === 0}}">
           <view class="detail-empty">
             <text>这一天没有打卡记录</text>
           </view>
         </view>
+
+        <!-- 好友的打卡 -->
+        <view wx:if="{{detailFriendData && detailFriendData.length > 0}}">
+          <text class="detail-section-label" style="margin-top: 20rpx;">👥 好友打卡</text>
+          <view class="detail-item friend-detail-item" wx:for="{{detailFriendData}}" wx:key="openid">
+            <view class="detail-item-header">
+              <block wx:if="{{item.avatarUrl}}">
+                <image class="friend-detail-avatar" src="{{item.avatarUrl}}" mode="aspectFill"></image>
+              </block>
+              <block wx:else>
+                <view class="friend-detail-avatar-placeholder">👤</view>
+              </block>
+              <text class="detail-item-name">{{item.nickName || '好友'}}</text>
+              <text class="friend-checkin-count">打了 {{item.checkinCount}} 次</text>
+            </view>
+          </view>
+        </view>
       </view>
     </view>
+  </view>
+
+  <!-- 好友区域 -->
+  <view class="friend-section" wx:if="{{friends && friends.length > 0}}">
+    <text class="friend-section-title">👥 好友今日打卡</text>
+    <scroll-view class="friend-scroll" scroll-x>
+      <view class="friend-chip {{activeFriend ? 'active' : ''}}" bindtap="onFriendFilter" data-openid="">
+        <text>🙋 我</text>
+        <text class="chip-stats">{{friendTodayChecked}}次</text>
+      </view>
+      <view class="friend-chip {{item.openid === activeFriend ? 'active' : ''}}" 
+            wx:for="{{friends}}" wx:key="openid"
+            bindtap="onFriendFilter" data-openid="{{item.openid}}">
+        <block wx:if="{{item.avatarUrl}}">
+          <image class="chip-avatar" src="{{item.avatarUrl}}" mode="aspectFill"></image>
+        </block>
+        <block wx:else>
+          <text class="chip-emoji">👤</text>
+        </block>
+        <text class="chip-name">{{item.nickName || '好友'}}</text>
+        <text class="chip-stats">{{item.todayCheckins}}次</text>
+      </view>
+    </scroll-view>
   </view>
 
   <!-- 加载 -->

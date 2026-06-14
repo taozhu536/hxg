@@ -2,7 +2,14 @@ Page({
   data: {
     overview: null,
     loading: true,
-    loginStatus: false
+    loginStatus: false,
+    userInfo: { nickName: '', avatarUrl: '' },
+    gotUserProfile: false,
+    // 好友
+    friends: [],
+    inviteCode: '',
+    showAddFriend: false,
+    addFriendCode: ''
   },
 
   onLoad() {
@@ -16,19 +23,134 @@ Page({
   async loadProfile() {
     this.setData({ loading: true })
     try {
-      const res = await wx.cloud.callFunction({
-        name: 'stats',
-        data: { action: 'overview' }
-      })
-      
+      // 并行获取用户资料 + 统计 + 好友列表 + 邀请码
+      const [loginRes, statsRes, friendsRes, codeRes] = await Promise.all([
+        wx.cloud.callFunction({
+          name: 'login',
+          data: { action: 'login' }
+        }),
+        wx.cloud.callFunction({
+          name: 'stats',
+          data: { action: 'overview' }
+        }),
+        wx.cloud.callFunction({
+          name: 'friends',
+          data: { action: 'list' }
+        }),
+        wx.cloud.callFunction({
+          name: 'friends',
+          data: { action: 'myCode' }
+        })
+      ])
+
+      const user = loginRes.result.user || {}
+      const hasAvatar = !!(user.avatarUrl || '')
+
       this.setData({
-        overview: res.result.data,
+        overview: statsRes.result.data,
         loginStatus: true,
-        loading: false
+        loading: false,
+        userInfo: {
+          nickName: user.nickName || '戒瘾勇士',
+          avatarUrl: user.avatarUrl || ''
+        },
+        gotUserProfile: hasAvatar,
+        friends: friendsRes.result.data || [],
+        inviteCode: codeRes.result.data ? codeRes.result.data.inviteCode : ''
       })
     } catch (err) {
       console.error(err)
       this.setData({ loading: false })
+    }
+  },
+
+  // 获取微信用户信息
+  async onGetUserInfo(e) {
+    const { userInfo } = e.detail
+    if (!userInfo) {
+      wx.showToast({ title: '获取信息失败', icon: 'none' })
+      return
+    }
+
+    try {
+      wx.showLoading({ title: '保存中...' })
+      await wx.cloud.callFunction({
+        name: 'login',
+        data: {
+          action: 'updateProfile',
+          nickName: userInfo.nickName,
+          avatarUrl: userInfo.avatarUrl
+        }
+      })
+
+      this.setData({
+        userInfo: {
+          nickName: userInfo.nickName,
+          avatarUrl: userInfo.avatarUrl
+        },
+        gotUserProfile: true
+      })
+      wx.hideLoading()
+      wx.showToast({ title: '✅ 更新成功', icon: 'success' })
+    } catch (err) {
+      wx.hideLoading()
+      wx.showToast({ title: '保存失败', icon: 'none' })
+    }
+  },
+
+  // === 好友功能 ===
+
+  // 打开添加好友弹窗
+  onShowAddFriend() {
+    this.setData({
+      showAddFriend: true,
+      addFriendCode: ''
+    })
+  },
+
+  // 关闭添加好友弹窗
+  onCloseAddFriend() {
+    this.setData({ showAddFriend: false })
+  },
+
+  // 输入邀请码
+  onAddCodeInput(e) {
+    this.setData({ addFriendCode: e.detail.value })
+  },
+
+  // 确认添加好友
+  async onConfirmAddFriend() {
+    const code = this.data.addFriendCode.toUpperCase()
+    if (code.length < 4) {
+      wx.showToast({ title: '请输入4位邀请码', icon: 'none' })
+      return
+    }
+
+    wx.showLoading({ title: '添加中...' })
+    try {
+      const res = await wx.cloud.callFunction({
+        name: 'friends',
+        data: { action: 'add', inviteCode: code }
+      })
+
+      wx.hideLoading()
+
+      if (res.result.code === 0) {
+        wx.showToast({
+          title: `✅ 已添加 ${res.result.data.nickName || '好友'}`,
+          icon: 'success'
+        })
+        this.setData({ showAddFriend: false })
+        this.loadProfile()
+      } else {
+        wx.showToast({
+          title: res.result.msg || '添加失败',
+          icon: 'none'
+        })
+      }
+    } catch (err) {
+      wx.hideLoading()
+      wx.showToast({ title: '添加失败', icon: 'none' })
     }
   },
 
@@ -73,7 +195,7 @@ Page({
   onAbout() {
     wx.showModal({
       title: '关于拜拜坏习惯拯救时间',
-      content: '拜拜坏习惯拯救时间 v1.0\n帮你戒掉坏习惯，养成好习惯 💪\n\n用坚持改变自己，用打卡见证成长。',
+      content: '拜拜坏习惯拯救时间 v1.1\n帮你戒掉坏习惯，养成好习惯 💪\n\n用坚持改变自己，用打卡见证成长。',
       showCancel: false
     })
   }

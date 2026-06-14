@@ -15,6 +15,10 @@
     {
       "name": "stats",
       "timeout": 10
+    },
+    {
+      "name": "friends",
+      "timeout": 10
     }
   ],
   "envId": "cloud1-d8gshwhb5dc72723e",

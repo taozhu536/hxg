@@ -12,8 +12,13 @@ Page({
     dayDetail: null,
     detailDate: '',
     showDetail: false,
+    detailFriendData: null,
     monthStats: { totalDays: 0, checkedDays: 0 },
-    loading: true
+    loading: true,
+    // 好友
+    friends: [],
+    activeFriend: '',
+    friendTodayChecked: 0
   },
 
   onLoad() {
@@ -37,37 +42,52 @@ Page({
         name: 'habits',
         data: { action: 'list' }
       })
-      
+
       const habits = habitsRes.result.data || []
-      
+
       // 生成日历
       this.generateCalendar()
-      
+
       // 获取月度统计
       const statsRes = await wx.cloud.callFunction({
         name: 'stats',
         data: { action: 'monthly' }
       })
-      
+
       const monthlyData = statsRes.result.data || { calendar: [], totalDays: 0 }
-      
+
       // 合并打卡数据到日历
       const checkedDates = new Set()
       monthlyData.calendar.forEach(d => {
         if (d.hasCheckin) checkedDates.add(d.date)
       })
-      
+
       const calendarDays = this.data.calendarDays.map(day => {
         if (day.date) {
           day.hasCheckin = checkedDates.has(day.date)
         }
         return day
       })
-      
+
       const totalDays = monthlyData.calendar.length
       const checkedDays = monthlyData.totalDays
       const rate = totalDays > 0 ? Math.round(checkedDays / totalDays * 100) : 0
-      
+
+      // 获取好友列表
+      let friends = []
+      let friendTodayChecked = 0
+      try {
+        const friendsRes = await wx.cloud.callFunction({
+          name: 'friends',
+          data: { action: 'list' }
+        })
+        friends = friendsRes.result.data || []
+        friendTodayChecked = friends.reduce((sum, f) => sum + (f.todayCheckins || 0), 0)
+      } catch (e) {
+        // 可能还没有 friends 云函数或数据库，忽略
+        console.warn('加载好友失败:', e)
+      }
+
       this.setData({
         habits,
         calendarDays,
@@ -76,6 +96,8 @@ Page({
           checkedDays: checkedDays,
           rate: rate
         },
+        friends,
+        friendTodayChecked,
         loading: false
       })
     } catch (err) {
@@ -88,14 +110,14 @@ Page({
     const { currentYear, currentMonth } = this.data
     const daysInMonth = util.getDaysInMonth(currentYear, currentMonth)
     const firstDay = util.getFirstDayOfMonth(currentYear, currentMonth)
-    
+
     const days = []
-    
+
     // 填充空白
     for (let i = 0; i < firstDay; i++) {
       days.push({ empty: true })
     }
-    
+
     // 填充日期
     for (let d = 1; d <= daysInMonth; d++) {
       const dateStr = `${currentYear}-${String(currentMonth).padStart(2, '0')}-${String(d).padStart(2, '0')}`
@@ -108,7 +130,7 @@ Page({
         isFuture: new Date(dateStr) > new Date()
       })
     }
-    
+
     this.setData({ calendarDays: days })
   },
 
@@ -145,23 +167,31 @@ Page({
     this.loadData()
   },
 
-  // 点击日期查看详情
+  // 点击日期查看详情（含好友打卡）
   async onDayTap(e) {
     const { date } = e.currentTarget.dataset
     if (!date) return
-    
+
     const now = new Date()
     if (new Date(date) > now) return
-    
+
     wx.showLoading({ title: '加载中...' })
     try {
-      const res = await wx.cloud.callFunction({
-        name: 'checkin',
-        data: { action: 'daily', date }
-      })
-      
+      // 并行获取自己的打卡 + 好友在该日的打卡
+      const [myRes, friendRes] = await Promise.all([
+        wx.cloud.callFunction({
+          name: 'checkin',
+          data: { action: 'daily', date }
+        }),
+        wx.cloud.callFunction({
+          name: 'friends',
+          data: { action: 'checkins', date }
+        })
+      ])
+
       this.setData({
-        dayDetail: res.result.data || [],
+        dayDetail: myRes.result.data || [],
+        detailFriendData: friendRes.result.data || [],
         detailDate: date,
         showDetail: true
       })
@@ -177,9 +207,15 @@ Page({
     this.setData({ showDetail: false })
   },
 
+  // 好友筛选（切换活跃好友后在日历上标记）
+  onFriendFilter(e) {
+    const { openid } = e.currentTarget.dataset
+    this.setData({ activeFriend: openid })
+  },
+
   onHabitFilter(e) {
     const { id } = e.currentTarget.dataset
     this.setData({ selectedHabitId: id })
-    this.loadData()
+    // 当前版本 habit 筛选只供展示
   }
 })

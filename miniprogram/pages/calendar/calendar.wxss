@@ -311,3 +311,104 @@
   color: #999;
   font-size: 28rpx;
 }
+
+.detail-section-label {
+  display: block;
+  font-size: 26rpx;
+  font-weight: 600;
+  color: #FF6B35;
+  margin-bottom: 12rpx;
+}
+
+.friend-detail-item {
+  background: #FFF8F0;
+}
+
+.friend-detail-avatar {
+  width: 48rpx;
+  height: 48rpx;
+  border-radius: 50%;
+}
+
+.friend-detail-avatar-placeholder {
+  width: 48rpx;
+  height: 48rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28rpx;
+  background: #FFF0E6;
+  border-radius: 50%;
+}
+
+.friend-checkin-count {
+  font-size: 22rpx;
+  color: #FF6B35;
+  background: #FFF0E6;
+  padding: 4rpx 14rpx;
+  border-radius: 20rpx;
+  margin-left: auto;
+}
+
+/* ===== 好友区域 ===== */
+.friend-section {
+  margin: 20rpx 30rpx 0;
+}
+
+.friend-section-title {
+  display: block;
+  font-size: 26rpx;
+  font-weight: 600;
+  color: #2D2D2D;
+  margin-bottom: 12rpx;
+}
+
+.friend-scroll {
+  white-space: nowrap;
+  padding-bottom: 10rpx;
+}
+
+.friend-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8rpx;
+  padding: 10rpx 20rpx;
+  background: #fff;
+  border-radius: 40rpx;
+  font-size: 24rpx;
+  color: #666;
+  margin-right: 12rpx;
+  border: 2rpx solid #F0E0D0;
+}
+
+.friend-chip.active {
+  background: #FF6B35;
+  color: #fff;
+  border-color: #FF6B35;
+}
+
+.friend-chip.active .chip-stats {
+  color: rgba(255,255,255,0.8);
+}
+
+.chip-avatar {
+  width: 36rpx;
+  height: 36rpx;
+  border-radius: 50%;
+}
+
+.chip-emoji {
+  font-size: 28rpx;
+}
+
+.chip-name {
+  max-width: 80rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.chip-stats {
+  font-size: 20rpx;
+  color: #FFB347;
+  font-weight: 500;
+}
