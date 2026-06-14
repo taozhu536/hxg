@@ -1,0 +1,26 @@
+{
+  "functions": [
+    {
+      "name": "login",
+      "timeout": 3
+    },
+    {
+      "name": "habits",
+      "timeout": 10
+    },
+    {
+      "name": "checkin",
+      "timeout": 10
+    },
+    {
+      "name": "stats",
+      "timeout": 10
+    }
+  ],
+  "envId": "cloud1-d8gshwhb5dc72723e",
+  "$schema": "https://framework-1258016615.tcloudbaseapp.com/schema/latest/framework.schema.json",
+  "framework": {
+    "name": "拜拜坏习惯拯救时间",
+    "plugins": {}
+  }
+}

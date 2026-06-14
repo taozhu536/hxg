@@ -1,0 +1,154 @@
+/* ===== 统计页面 ===== */
+
+.page {
+  min-height: 100vh;
+  padding-bottom: 40rpx;
+}
+
+.stats-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40rpx 30rpx;
+}
+
+.stats-icon {
+  font-size: 100rpx;
+  width: 120rpx;
+  height: 120rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #FFF0E6;
+  border-radius: 28rpx;
+  margin-bottom: 16rpx;
+}
+
+.stats-name {
+  font-size: 40rpx;
+  font-weight: 700;
+  color: #2D2D2D;
+  margin-bottom: 8rpx;
+}
+
+.stats-desc {
+  font-size: 26rpx;
+  color: #999;
+}
+
+/* ===== 数据卡片 ===== */
+.data-cards {
+  display: flex;
+  gap: 16rpx;
+  padding: 0 30rpx;
+  margin-bottom: 30rpx;
+}
+
+.data-card {
+  flex: 1;
+  background: #fff;
+  padding: 24rpx 16rpx;
+  border-radius: 16rpx;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6rpx;
+}
+
+.data-num {
+  font-size: 52rpx;
+  font-weight: 800;
+  color: #FF6B35;
+}
+
+.data-label {
+  font-size: 22rpx;
+  color: #999;
+}
+
+.data-unit {
+  font-size: 20rpx;
+  color: #ccc;
+}
+
+/* ===== 周数据 ===== */
+.section {
+  padding: 0 30rpx;
+  margin-bottom: 30rpx;
+}
+
+.section-title {
+  display: block;
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #2D2D2D;
+  margin-bottom: 20rpx;
+}
+
+.week-row {
+  display: flex;
+  justify-content: space-between;
+  background: #fff;
+  padding: 24rpx 30rpx;
+  border-radius: 16rpx;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+}
+
+.week-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.week-dot {
+  font-size: 28rpx;
+  width: 44rpx;
+  height: 44rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.week-label {
+  font-size: 22rpx;
+  color: #999;
+}
+
+/* ===== 激励卡片 ===== */
+.motivation-card {
+  background: linear-gradient(135deg, #FFF0E6, #FFF7F0);
+  margin: 0 30rpx;
+  padding: 30rpx;
+  border-radius: 16rpx;
+  text-align: center;
+}
+
+.motivation-text {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #FF6B35;
+}
+
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 200rpx 0;
+  gap: 20rpx;
+  color: #999;
+}
+
+.loading-spinner {
+  width: 60rpx;
+  height: 60rpx;
+  border: 4rpx solid #FFF0E6;
+  border-top-color: #FF6B35;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}

@@ -1,0 +1,66 @@
+<!-- 打卡日历页面 -->
+<view class="page">
+
+  <!-- 月切换 -->
+  <view class="month-picker">
+    <view class="month-nav" bindtap="onPrevMonth">‹</view>
+    <text class="month-title">{{currentYear}}年{{currentMonth}}月</text>
+    <view class="month-nav" bindtap="onNextMonth">›</view>
+  </view>
+
+  <!-- 统计摘要 -->
+  <view class="stats-summary card">
+    <view class="stats-row">
+      <view class="mini-stat">
+        <text class="mini-num">{{monthStats.checkedDays}}</text>
+        <text class="mini-label">已打卡</text>
+      </view>
+      <view class="stat-divider"></view>
+      <view class="mini-stat">
+        <text class="mini-num">{{monthStats.totalDays - monthStats.checkedDays}}</text>
+        <text class="mini-label">未打卡</text>
+      </view>
+      <view class="stat-divider"></view>
+      <view class="mini-stat">
+        <text class="mini-num" style="color:#06D6A0">{{monthStats.rate}}%</text>
+        <text class="mini-label">完成率</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 简版习惯筛选 -->
+  <scroll-view class="habit-filter" scroll-x wx:if="{{habits.length > 0}}">
+    <view class="filter-tag {{selectedHabitId === 'all' ? 'active' : ''}}"
+          bindtap="onHabitFilter" data-id="all">
+      <text>全部</text>
+    </view>
+    <view class="filter-tag {{selectedHabitId === item._id ? 'active' : ''}}"
+          wx:for="{{habits}}" wx:key="_id"
+          bindtap="onHabitFilter" data-id="{{item._id}}">
+      <text>{{item.icon}} {{item.name}}</text>
+    </view>
+  </scroll-view>
+
+  <!-- 星期标题 -->
+  <view class="calendar">
+    <view class="weekday-row">
+      <view class="weekday" wx:for="{{weekdayLabels}}" wx:key="*this">{{item}}</view>
+    </view>
+
+    <!-- 日网格 -->
+    <view class="day-grid">
+      <view class="day-cell {{item.empty ? 'empty' : ''}} {{item.isToday ? 'today' : ''}} {{item.hasCheckin ? 'checked' : ''}} {{item.isFuture ? 'future' : ''}}"
+            wx:for="{{calendarDays}}" wx:key="{{item.day || index}}"
+            bindtap="onDayTap" data-date="{{item.date}}">
+        <text class="day-num" wx:if="{{!item.empty}}">{{item.day}}</text>
+        <view class="day-dot" wx:if="{{item.hasCheckin}}"></view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 加载 -->
+  <view class="loading-state" wx:if="{{loading}}">
+    <text>加载中...</text>
+  </view>
+
+</view>

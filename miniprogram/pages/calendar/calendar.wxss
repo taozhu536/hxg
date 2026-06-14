@@ -1,0 +1,194 @@
+/* ===== 日历页面 ===== */
+
+.page {
+  min-height: 100vh;
+  padding-bottom: 20rpx;
+}
+
+/* ===== 月份切换 ===== */
+.month-picker {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 40rpx;
+  padding: 30rpx;
+}
+
+.month-nav {
+  width: 64rpx;
+  height: 64rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 44rpx;
+  color: #FF6B35;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+.month-nav:active {
+  transform: scale(0.9);
+}
+
+.month-title {
+  font-size: 36rpx;
+  font-weight: 700;
+  color: #2D2D2D;
+  min-width: 200rpx;
+  text-align: center;
+}
+
+/* ===== 统计摘要 ===== */
+.stats-summary.card {
+  margin: 0 30rpx 20rpx;
+  padding: 20rpx;
+}
+
+.stats-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.mini-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4rpx;
+}
+
+.mini-num {
+  font-size: 40rpx;
+  font-weight: 700;
+  color: #FF6B35;
+}
+
+.mini-label {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.stat-divider {
+  width: 2rpx;
+  height: 40rpx;
+  background: #F0E0D0;
+}
+
+/* ===== 习惯筛选 ===== */
+.habit-filter {
+  padding: 0 30rpx;
+  margin-bottom: 16rpx;
+  white-space: nowrap;
+}
+
+.filter-tag {
+  display: inline-flex;
+  padding: 10rpx 24rpx;
+  background: #fff;
+  border-radius: 30rpx;
+  font-size: 24rpx;
+  color: #666;
+  margin-right: 12rpx;
+  border: 2rpx solid #F0E0D0;
+}
+
+.filter-tag.active {
+  background: #FF6B35;
+  color: #fff;
+  border-color: #FF6B35;
+}
+
+/* ===== 日历主体 ===== */
+.calendar {
+  background: #fff;
+  margin: 0 30rpx;
+  border-radius: 16rpx;
+  padding: 16rpx 20rpx;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+}
+
+.weekday-row {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  margin-bottom: 8rpx;
+}
+
+.weekday {
+  text-align: center;
+  font-size: 24rpx;
+  color: #999;
+  padding: 12rpx 0;
+}
+
+.day-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4rpx;
+}
+
+.day-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1;
+  border-radius: 12rpx;
+  position: relative;
+  transition: all 0.2s;
+}
+
+.day-cell.empty {
+  background: transparent;
+}
+
+.day-cell:not(.empty):not(.future):active {
+  transform: scale(0.9);
+}
+
+.day-cell.today {
+  background: #FFF0E6;
+}
+
+.day-cell.checked {
+  background: #E8FFF0;
+}
+
+.day-cell.checked.today {
+  background: linear-gradient(135deg, #06D6A0, #E8FFF0);
+}
+
+.day-cell.future {
+  opacity: 0.3;
+}
+
+.day-num {
+  font-size: 28rpx;
+  font-weight: 500;
+  color: #333;
+}
+
+.today .day-num {
+  color: #FF6B35;
+  font-weight: 700;
+}
+
+.checked .day-num {
+  color: #06D6A0;
+  font-weight: 600;
+}
+
+.day-dot {
+  width: 8rpx;
+  height: 8rpx;
+  background: #06D6A0;
+  border-radius: 50%;
+  margin-top: 2rpx;
+}
+
+/* ===== 加载 ===== */
+.loading-state {
+  text-align: center;
+  padding: 40rpx;
+  color: #999;
+}

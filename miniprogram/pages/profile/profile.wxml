@@ -1,0 +1,60 @@
+<!-- 个人中心页面 -->
+<view class="page">
+
+  <!-- 加载状态 -->
+  <view class="loading-state" wx:if="{{loading}}">
+    <view class="loading-spinner"></view>
+    <text>加载中...</text>
+  </view>
+
+  <view wx:if="{{!loading}}">
+
+    <!-- 用户信息区 -->
+    <view class="profile-header">
+      <view class="avatar">👤</view>
+      <text class="nickname">{{loginStatus ? '戒瘾勇士' : '未登录'}}</text>
+      <text class="motto">每一次打卡，都是向更好的自己迈进 💪</text>
+    </view>
+
+    <!-- 总览数据 -->
+    <view class="overview-cards" wx:if="{{overview}}">
+      <view class="overview-card">
+        <text class="overview-num">{{overview.activeHabits || 0}}</text>
+        <text class="overview-label">活跃习惯数</text>
+      </view>
+      <view class="overview-card">
+        <text class="overview-num">{{overview.totalCheckins || 0}}</text>
+        <text class="overview-label">累计打卡</text>
+      </view>
+      <view class="overview-card">
+        <text class="overview-num">{{overview.monthlyCheckins || 0}}</text>
+        <text class="overview-label">本月打卡</text>
+      </view>
+    </view>
+
+    <!-- 最佳习惯 -->
+    <view class="section" wx:if="{{overview && overview.topHabits && overview.topHabits.length > 0}}">
+      <text class="section-title">🏆 最佳习惯</text>
+      <view class="top-habit-item" wx:for="{{overview.topHabits}}" wx:key="_id"
+            bindtap="onHabitTap" data-id="{{item._id}}">
+        <text class="top-icon">{{item.icon}}</text>
+        <view class="top-info">
+          <text class="top-name">{{item.name}}</text>
+          <text class="top-stats">累计 {{item.totalDays}} 天 · 连胜 {{item.streak}} 天</text>
+        </view>
+        <text class="top-arrow">›</text>
+      </view>
+    </view>
+
+    <!-- 菜单列表 -->
+    <view class="menu-group">
+      <view class="menu-item" bindtap="onAbout">
+        <text class="menu-icon">ℹ️</text>
+        <text class="menu-label">关于戒瘾打卡</text>
+        <text class="menu-arrow">›</text>
+      </view>
+    </view>
+
+  </view>
+
+</view>

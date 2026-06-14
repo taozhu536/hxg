@@ -1,0 +1,59 @@
+/* ===== 设置页面 ===== */
+
+.page {
+  min-height: 100vh;
+  padding: 20rpx 0;
+}
+
+.settings-group {
+  margin-bottom: 30rpx;
+}
+
+.group-title {
+  display: block;
+  font-size: 26rpx;
+  color: #999;
+  padding: 0 30rpx 16rpx;
+}
+
+.setting-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #fff;
+  padding: 28rpx 30rpx;
+  border-bottom: 2rpx solid #F5F5F5;
+}
+
+.setting-item:active {
+  background: #FAFAFA;
+}
+
+.setting-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4rpx;
+}
+
+.setting-label {
+  font-size: 30rpx;
+  color: #2D2D2D;
+}
+
+.setting-desc {
+  font-size: 22rpx;
+  color: #999;
+}
+
+.setting-value {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  color: #FF6B35;
+  font-size: 28rpx;
+}
+
+.arrow {
+  font-size: 36rpx;
+  color: #ccc;
+}

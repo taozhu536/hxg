@@ -1,0 +1,75 @@
+<!-- 添加习惯页面 -->
+<view class="page">
+  
+  <scroll-view class="form" scroll-y>
+    
+    <!-- 习惯名称 -->
+    <view class="form-section">
+      <text class="form-label">习惯名称 *</text>
+      <input class="form-input" placeholder="想戒掉什么？" 
+             value="{{name}}" bindinput="onNameInput" maxlength="20" />
+    </view>
+
+    <!-- 习惯描述 -->
+    <view class="form-section">
+      <text class="form-label">描述（为什么想戒掉它？）</text>
+      <input class="form-input" placeholder="写下你的动机..."
+             value="{{description}}" bindinput="onDescInput" maxlength="50" />
+    </view>
+
+    <!-- 目标 -->
+    <view class="form-section">
+      <text class="form-label">目标（选填）</text>
+      <input class="form-input" placeholder="例如：坚持30天不刷短视频"
+             value="{{target}}" bindinput="onTargetInput" maxlength="50" />
+    </view>
+
+    <!-- 分类选择 -->
+    <view class="form-section">
+      <text class="form-label">选择分类</text>
+      <view class="category-grid">
+        <view class="category-item {{category === item.key ? 'active' : ''}}"
+              wx:for="{{categories}}" wx:key="key"
+              bindtap="onCategorySelect" data-key="{{item.key}}">
+          <text class="cat-icon">{{item.icon}}</text>
+          <text class="cat-name">{{item.label}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 图标选择 -->
+    <view class="form-section">
+      <text class="form-label">选择图标</text>
+      <view class="icon-selector" bindtap="onShowIconPicker">
+        <text class="selected-icon">{{icon}}</text>
+        <text class="icon-change-hint">点此更换</text>
+      </view>
+    </view>
+
+    <!-- 保存按钮 -->
+    <view class="form-actions">
+      <button class="btn-primary" bindtap="onSave" disabled="{{submitting}}">
+        {{submitting ? '创建中...' : '✅ 创建习惯'}}
+      </button>
+    </view>
+
+  </scroll-view>
+
+  <!-- 图标选择弹窗 -->
+  <view class="popup-overlay {{showIconPicker ? 'show' : ''}}" bindtap="onCloseIconPicker">
+    <view class="icon-picker-panel" catchtap="">
+      <view class="picker-header">
+        <text class="picker-title">选择图标</text>
+        <view bindtap="onCloseIconPicker" class="picker-close">✕</view>
+      </view>
+      <view class="icon-grid">
+        <view class="icon-item {{icon === item ? 'active' : ''}}"
+              wx:for="{{icons}}" wx:for-item="item" wx:key="*this"
+              bindtap="onIconSelect" data-icon="{{item}}">
+          <text>{{item}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+</view>

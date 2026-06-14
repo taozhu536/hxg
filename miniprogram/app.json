@@ -1,0 +1,45 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/calendar/calendar",
+    "pages/profile/profile",
+    "pages/add-habit/add-habit",
+    "pages/stats/stats",
+    "pages/settings/settings"
+  ],
+  "window": {
+    "navigationBarBackgroundColor": "#FF6B35",
+    "navigationBarTitleText": "拜拜坏习惯拯救时间",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#FFF7F0",
+    "backgroundTextStyle": "light"
+  },
+  "tabBar": {
+    "color": "#999",
+    "selectedColor": "#FF6B35",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "iconPath": "images/tab_home.png",
+        "selectedIconPath": "images/tab_home_active.png",
+        "text": "习惯"
+      },
+      {
+        "pagePath": "pages/calendar/calendar",
+        "iconPath": "images/tab_calendar.png",
+        "selectedIconPath": "images/tab_calendar_active.png",
+        "text": "日历"
+      },
+      {
+        "pagePath": "pages/profile/profile",
+        "iconPath": "images/tab_profile.png",
+        "selectedIconPath": "images/tab_profile_active.png",
+        "text": "我的"
+      }
+    ]
+  },
+  "usingComponents": {},
+  "sitemapLocation": "sitemap.json"
+}

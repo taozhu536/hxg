@@ -1,0 +1,117 @@
+<!-- 首页 - 习惯列表 -->
+<view class="page">
+  
+  <!-- 顶部欢迎区域 -->
+  <view class="header-section">
+    <view class="greeting">{{greeting}}</view>
+    <view class="header-stats" wx:if="{{!loading}}">
+      <view class="stat-item">
+        <text class="stat-num">{{todayChecked}}</text>
+        <text class="stat-label">今日打卡</text>
+      </view>
+      <view class="stat-divider"></view>
+      <view class="stat-item">
+        <text class="stat-num">{{totalHabits}}</text>
+        <text class="stat-label">习惯数</text>
+      </view>
+      <view class="stat-divider"></view>
+      <view class="stat-item">
+        <text class="stat-num">{{userStats.totalCheckins || 0}}</text>
+        <text class="stat-label">累计打卡</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 今日打卡进度 -->
+  <view class="progress-section" wx:if="{{!loading && totalHabits > 0}}">
+    <view class="progress-header">
+      <text class="progress-title">今日进度</text>
+      <text class="progress-percent">{{todayChecked}}/{{totalHabits}}</text>
+    </view>
+    <view class="progress-bar-bg">
+      <view class="progress-bar-fill" style="width: {{totalHabits > 0 ? (todayChecked / totalHabits * 100) : 0}}%"></view>
+    </view>
+  </view>
+
+  <!-- 习惯列表 -->
+  <view class="habits-list" wx:if="{{!loading}}">
+    <view class="list-header">
+      <text class="list-title">📋 我的习惯</text>
+      <view class="btn-add" bindtap="onAddHabit">
+        <text>＋ 新建</text>
+      </view>
+    </view>
+
+    <view wx:for="{{habits}}" wx:key="_id" class="habit-card-wrapper fade-in" style="animation-delay: {{index * 0.05}}s">
+      <view class="habit-card {{item.isCheckedToday ? 'checked' : ''}}" 
+            bindtap="onCheckinTap" data-id="{{item._id}}" data-name="{{item.name}}">
+        
+        <!-- 图标和基本信息 -->
+        <view class="habit-left">
+          <view class="habit-icon">{{item.icon || '🔥'}}</view>
+          <view class="habit-info">
+            <text class="habit-name">{{item.name}}</text>
+            <text class="habit-desc" wx:if="{{item.description}}">{{item.description}}</text>
+          </view>
+        </view>
+
+        <!-- 右侧：连胜天数 + 打卡状态 -->
+        <view class="habit-right">
+          <view class="streak-badge" wx:if="{{item.streak > 0}}">
+            <text class="streak-fire">🔥</text>
+            <text class="streak-num">{{item.streak}}天</text>
+          </view>
+          <view class="checkin-btn {{item.isCheckedToday ? 'done' : ''}}">
+            <text>{{item.isCheckedToday ? '✅' : '⬜'}}</text>
+          </view>
+        </view>
+      </view>
+      
+      <!-- 激励小语 -->
+      <view class="motivation-text" wx:if="{{item.streak >= 3}}">
+        <text>{{getMotivation(item.streak)}}</text>
+      </view>
+    </view>
+
+    <!-- 空状态 -->
+    <view class="empty-state" wx:if="{{habits.length === 0}}">
+      <view class="empty-icon">🌱</view>
+      <text class="empty-title">还没有习惯？</text>
+      <text class="empty-desc">创建一个你想戒掉的习惯，开始改变之旅</text>
+      <view class="btn-primary" bindtap="onAddHabit">创建第一个习惯</view>
+    </view>
+  </view>
+
+  <!-- 加载中 -->
+  <view class="loading-state" wx:if="{{loading}}">
+    <view class="loading-spinner"></view>
+    <text>加载中...</text>
+  </view>
+
+  <!-- 打卡弹窗 -->
+  <view class="popup-overlay {{showPopup ? 'show' : ''}}" bindtap="onClosePopup">
+    <view class="popup-content" catchtap="">
+      <view class="popup-header">
+        <text class="popup-title">📝 打卡确认</text>
+        <view class="popup-close" bindtap="onClosePopup">✕</view>
+      </view>
+      
+      <view class="popup-body">
+        <view class="popup-date">{{popupDate}}</view>
+        <view class="popup-hint">今天坚持了吗？👊</view>
+        
+        <view class="note-section">
+          <text class="note-label">备注（选填）</text>
+          <input class="note-input" placeholder="写下今天的感受..." 
+                 value="{{popupNote}}" bindinput="onNoteInput" />
+        </view>
+      </view>
+
+      <view class="popup-footer">
+        <button class="btn-primary" bindtap="onConfirmCheckin">✅ 确认打卡</button>
+        <button class="btn-secondary" bindtap="onClosePopup">再想想</button>
+      </view>
+    </view>
+  </view>
+
+</view>

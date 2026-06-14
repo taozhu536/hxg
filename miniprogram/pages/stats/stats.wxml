@@ -1,0 +1,59 @@
+<!-- 习惯统计页面 -->
+<view class="page">
+
+  <view class="loading-state" wx:if="{{loading}}">
+    <view class="loading-spinner"></view>
+    <text>加载中...</text>
+  </view>
+
+  <view wx:if="{{!loading && habit}}">
+
+    <!-- 习惯头部 -->
+    <view class="stats-header">
+      <view class="stats-icon">{{habit.icon}}</view>
+      <text class="stats-name">{{habit.name}}</text>
+      <text class="stats-desc" wx:if="{{habit.description}}">{{habit.description}}</text>
+    </view>
+
+    <!-- 核心数据卡片 -->
+    <view class="data-cards">
+      <view class="data-card">
+        <text class="data-num">{{stats.currentStreak}}</text>
+        <text class="data-label">当前连胜</text>
+        <text class="data-unit">天</text>
+      </view>
+      <view class="data-card">
+        <text class="data-num" style="color:#FFB347">{{stats.maxStreak}}</text>
+        <text class="data-label">最长连胜</text>
+        <text class="data-unit">天</text>
+      </view>
+      <view class="data-card">
+        <text class="data-num" style="color:#06D6A0">{{stats.totalDays}}</text>
+        <text class="data-label">累计打卡</text>
+        <text class="data-unit">天</text>
+      </view>
+    </view>
+
+    <!-- 本周打卡 -->
+    <view class="section">
+      <text class="section-title">📊 本周打卡</text>
+      <view class="week-row">
+        <view class="week-item {{item.checked ? 'checked' : ''}}"
+              wx:for="{{weekData}}" wx:key="date">
+          <view class="week-dot {{item.checked ? 'checked' : ''}}">
+            <text wx:if="{{item.checked}}">✅</text>
+            <text wx:else>⬜</text>
+          </view>
+          <text class="week-label">{{item.label}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 激励 -->
+    <view class="motivation-card">
+      <text class="motivation-text">{{util.getMotivation(stats.currentStreak)}}</text>
+    </view>
+
+  </view>
+
+</view>

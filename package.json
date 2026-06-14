@@ -1,0 +1,15 @@
+{
+  "name": "weapp-sober",
+  "version": "1.0.0",
+  "description": "",
+  "main": "deploy.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "miniprogram-ci": "^2.1.31"
+  }
+}

@@ -1,0 +1,19 @@
+# 依赖
+node_modules/
+cloudfunctions/*/node_modules/
+cloudfunctions/*/package-lock.json
+
+# 密钥和敏感文件
+private.key
+*.key
+
+# 云函数部署备份
+node_modules/miniprogram-ci/dist/ci/cloud/uploadFunction.js.bak
+
+# 微信开发者工具
+.DS_Store
+*.local
+
+# 日志
+*.log
+npm-debug.log*
